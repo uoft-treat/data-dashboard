@@ -1,4 +1,6 @@
-import 'babel-polyfill';
+if (!global._babelPolyfill) {
+    require('babel-polyfill');
+}
 
 
 import express          from 'express';
@@ -51,12 +53,26 @@ app.get("/", (req, res) => {
     }
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", async (req, res) => {
     if (!req.user) {
         res.redirect("/");
     } else {
+
+        let experimentData = await ExperimentData.find({});
+        let data = {};
+        for(let row of experimentData) {
+            if(!data[row.name]) {
+                data[row.name] = [];
+            }
+            data[row.name].push({
+                ...(JSON.parse(row.data)),
+                createdAt: row.createdAt,
+            });
+        }
+
         res.render('dashboard', {
             user: req.user,
+            data,
         });
     }
 });

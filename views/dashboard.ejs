@@ -2,4 +2,32 @@
 
 <div class="container">
     <h3>Welcome <%= user.username %></h3>
+
+
+    <% for(const experimentTitle in data) { %>
+
+        <h4><%= experimentTitle %></h4>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <% for(const fieldName in data[experimentTitle][0]) { %>
+                    <th scope="col"><%= fieldName %></th>
+                <% } %>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(const row of data[experimentTitle]) { %>
+                <tr>
+                    <% for(const field in row) { %>
+                        <td><%= row[field] %></td>
+                    <% } %>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+
+    <% } %>
+
 </div>
